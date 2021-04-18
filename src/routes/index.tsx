@@ -7,7 +7,7 @@ interface PrivateRouteProps {
   isPrivate: boolean
   exact: boolean
   path: string
-  component: FC<{}>
+  component: FC
   section: string
 }
 
@@ -31,9 +31,7 @@ const Routes: React.FC = () => {
         <Route exact path="/login" component={Login} />
       </Switch>
     </BrowserRouter>
-  );
-};
+  )
+}
 
-export default Routes;
-
-
+export default Routes

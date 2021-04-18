@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react'
 import api from '../services/api'
+import { toast } from 'react-toastify'
 
 interface User {
   isAuthenticated: boolean
@@ -38,18 +39,18 @@ const AuthProvider: React.FC = ({ children }) => {
     setLoading(false)
   }, [])
 
-  async function handleLogin(
+  async function handleLogin (
     email: string,
     password: string,
-    keepLogged: boolean,
+    keepLogged: boolean
   ) {
     const data = {
       email: email,
-      password: password,
+      password: password
     }
     const user = {
       isAuthenticated: false,
-      token: '',
+      token: ''
     }
     await api
       .post('/auth/', data)
@@ -63,16 +64,17 @@ const AuthProvider: React.FC = ({ children }) => {
         api.defaults.headers.authorization = `Bearer ${response.data.access_token}`
       })
       .catch(error => {
+        toast(error.message)
         console.log(error)
       })
     setUser(user)
     return user.isAuthenticated
   }
 
-  function handleLogout() {
+  function handleLogout () {
     const removeUser: User = {
       isAuthenticated: false,
-      token: '',
+      token: ''
     }
     setUser(removeUser)
     localStorage.removeItem('user')
