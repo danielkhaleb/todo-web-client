@@ -3,6 +3,7 @@ import api from '../services/api'
 import { toast } from 'react-toastify'
 
 interface User {
+  email: string
   isAuthenticated: boolean
   token: string
 }
@@ -50,18 +51,19 @@ const AuthProvider: React.FC = ({ children }) => {
     }
     const user = {
       isAuthenticated: false,
-      token: ''
+      token: '',
+      email: email
     }
     await api
       .post('/auth/', data)
       .then(response => {
         user.isAuthenticated = true
-        user.token = response.data.access_token
+        user.token = response.data.userAuth.token
         if (keepLogged) {
           localStorage.setItem('user', JSON.stringify(user))
         }
         sessionStorage.setItem('user', JSON.stringify(user))
-        api.defaults.headers.authorization = `Bearer ${response.data.access_token}`
+        api.defaults.headers.authorization = `Bearer ${user.token}`
       })
       .catch(error => {
         toast(error.message)
@@ -74,7 +76,8 @@ const AuthProvider: React.FC = ({ children }) => {
   function handleLogout () {
     const removeUser: User = {
       isAuthenticated: false,
-      token: ''
+      token: '',
+      email: ''
     }
     setUser(removeUser)
     localStorage.removeItem('user')
