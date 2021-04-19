@@ -1,33 +1,19 @@
-import React, { useState, useContext, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Container, Section, ButtonFullWidth, DivCard } from './Project.style'
-import { useForm } from 'react-hook-form'
 import { useHistory } from 'react-router-dom'
-import { AuthUserContext } from '../../context/auth'
-import { faLock, faEnvelope } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { toast } from 'react-toastify'
-import LogoTransparent from '../../images/logo.png'
 import api from '../../services/api'
 import NavBar from '../../components/Navbar/Navbar'
 import HelloUser from '../../components/HelloUser/HelloUser'
 import IProject from '../../interfaces/Project'
 import ProjectCard from '../../components/ProjectCard/ProjectCard'
 
-type Inputs = {
-  name: string
-  description?: string
-}
-
 const Project: React.FC = () => {
-  const { register, handleSubmit, errors } = useForm<Inputs>()
-  const { handleLogin } = useContext(AuthUserContext)
   const [projects, setProjects] = useState<IProject[]>([])
   const [someProjectHasBeenDeleted, setSomeProjectHasBeenDeleted] = useState(false)
   const history = useHistory()
 
   const getProjectItems = useCallback(async () => {
     const response = await api.get('/project/list')
-    console.log('RESPONSE', response)
     if (response && response.data && response.data.projects) {
       setProjects([...response.data.projects])
     }
