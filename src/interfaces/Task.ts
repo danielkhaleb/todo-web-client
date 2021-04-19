@@ -1,5 +1,3 @@
-import IProject from './Project'
-
 export default interface ITask {
   id: string
   description: string
